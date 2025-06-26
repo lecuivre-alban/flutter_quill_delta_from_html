@@ -1,9 +1,11 @@
 import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:flutter_quill_delta_from_html/parser/extensions/node_ext.dart';
-import 'package:flutter_quill_delta_from_html/parser/html_utils.dart';
-import 'package:html/dom.dart' as dom;
-import 'custom_html_part.dart';
+import 'package:flutter_quill_delta_from_html/parser/html_utils.dart' as utils;
 import 'package:flutter_quill_delta_from_html/parser/node_processor.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:meta/meta.dart' show mustCallSuper;
+
+import 'custom_html_part.dart';
 
 /// Operations for converting supported HTML elements to Delta operations.
 ///
@@ -35,7 +37,7 @@ abstract class HtmlOperations {
     // the current element could be into a <li> then it's node can be
     // a <strong> or a <em>, or even a <span> then we first need to verify
     // if a inline an store into it to parse the attributes as we need
-    if (isInline(element.localName!)) {
+    if (utils.isInline(element.localName!)) {
       final Delta delta = Delta();
       final Map<String, dynamic> attributes = {};
       if (element.isStrong) attributes['bold'] = true;
@@ -106,6 +108,11 @@ abstract class HtmlOperations {
   /// Converts a table HTML element (`<table>`) to Delta operations.
   List<Operation> tableToOp(dom.Element element,
       [bool transformTableAsEmbed = false]);
+
+  @mustCallSuper
+  Map<String, dynamic> parseStyleAttribute(String style) {
+    return utils.parseStyleAttribute(style);
+  }
 
   /// Sets custom HTML parts to extend the conversion capabilities.
   ///

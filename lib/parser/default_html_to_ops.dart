@@ -1,9 +1,9 @@
 import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:flutter_quill_delta_from_html/parser/extensions/node_ext.dart';
 import 'package:flutter_quill_delta_from_html/parser/html_to_operation.dart';
-import 'package:flutter_quill_delta_from_html/parser/html_utils.dart';
-import 'package:html/dom.dart' as dom;
+import 'package:flutter_quill_delta_from_html/parser/html_utils.dart' as utils;
 import 'package:flutter_quill_delta_from_html/parser/node_processor.dart';
+import 'package:html/dom.dart' as dom;
 
 /// Default implementation of `HtmlOperations` for converting common HTML to Delta operations.
 ///
@@ -242,8 +242,8 @@ class DefaultHtmlToOperations extends HtmlOperations {
   List<Operation> imgToOp(dom.Element element) {
     final String src = element.getSafeAttribute('src');
     final String styles = element.getSafeAttribute('style');
-    final attributes =
-        parseImageStyleAttribute(styles, element.getSafeAttribute('align'));
+    final attributes = utils.parseImageStyleAttribute(
+        styles, element.getSafeAttribute('align'));
     if (src.isNotEmpty) {
       return [
         Operation.insert(
